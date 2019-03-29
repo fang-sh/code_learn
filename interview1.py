@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
 
-#题1：今日头条笔试——最小找零硬币数
-#题2：每日优鲜面试——两个有序数组，求合并后，按顺序排序输出，要求时间复杂度低
-#题3：今日头条面试——贪心算法
+#题目1：今日头条笔试——最小找零硬币数
+#题目2：每日优鲜面试——两个有序数组，求合并后，按顺序排序输出，要求时间复杂度低
+#题目3：今日头条面试——贪心算法
+#题目4：小年糕笔试1
+#题目5：小年糕笔试2
+#题目6：求全排列算法
 
 
 #题目1：今日头条笔试——最小找零硬币数
@@ -181,9 +184,38 @@ if __name__ == "__main__":
     
     solution(n,m,A,B)
 
+#########################################################################
+    
+#题目6：面试-求全排列算法
+#题目表述：递归法，见
+#    https://blog.csdn.net/zhoufen12345/article/details/53560099
+#    https://blog.csdn.net/ASJBFJSB/article/details/85711664   
+#思路：
 
+def perm(array, begin, end):
+    if begin >= end:
+        print "".join(array)
+    else:
+        for index in range(begin, end):
+            array[index], array[begin] = array[begin], array[index]
+            perm(array, begin+1, end)
+            array[index], array[begin] = array[begin], array[index]
 
+array="abc"
+b=list(array)
+perm(array, 0, len(array))
+ #----------------   
+def perm(array, begin, end):
+    if begin == end:
+        print "".join(array)
+    else:
+        for i in range(begin, end):
+            array[i], array[begin] = array[begin],array[i]
+            perm(array, begin+1, end)
+            array[i], array[begin] = array[begin],array[i]
 
+array = list(raw_input())
+perm(array, 0, len(array)) 
 
 
 
