@@ -298,16 +298,62 @@ def solution(arr):
 n = [int(i) for i in raw_input().split()]#3 4 6 5 5 7 8
 print solution(n)  
 
+#########################################################################
+
+#题目9：牛客网-剑指offer刷题-和为S的两个数子
+#题目表述：输入一个递增排序的数组和一个数字S，在数组中查找两个数，使得他们的和正好是S，
+#   如果有多对数字的和等于S，输出两个数的乘积最小的。
+#输入描述：
+#输出描述：
+#思路：题目中数组array递增，已经有序。若无序，最好先排序。定义两个指针，i=0，j=len(array)-1
+#        一个指针，从头开始，一个指针从尾开始。tsum为指定的和
+
+def GetSum(A, tsum):
+    i = 0
+    j = len(A)-1
+    while i < j:
+        if (i<j) and A[i] + A[j] > tsum:
+            j -= 1
+        elif (i<j) and A[i] + A[j] <tsum:
+            i += 1
+        else:
+            return A[i],A[j]
+    return []
 
 
+A = [1,2,3,4,5,6,7,8]
+tsum = 9
+print GetSum(A, tsum)
+            
+#########################################################################
 
+#题目10：牛客网-剑指offer刷题-和为S的两个数子
+#题目表述：小明很喜欢数学,有一天他在做数学作业时,要求计算出9~16的和,他马上就写出了
+#    正确答案是100。但是他并不满足于此,他在想究竟有多少种连续的正数序列的和为100(至少包括两个数)。
+#    没多久,他就得到另一组连续正数和为100的序列:18,19,20,21,22。现在把问题交给你,你能不能也很快
+#    的找出所有和为S的连续正数序列? Good Luck!。
+#输入描述：
+#输出描述：
+#思路：与题目9相比较，不一定都是low += 1 , high -= 1，本题是low +=1 , high += 1
+#    本题是连续的一组数，相邻两数差为1，求出和为tsum的所有数，数的个数不定
 
+def Find_Lianxu_Xulie(tsum):
+    res = []
+    low = 1#正整数，从1开始
+    high = 2#两个指针之间的数求和
+    while low < high:
+        getsum = (low+high)*(high-low+1)/2 #更新low和high之间序列的和
+        if getsum < tsum:
+            high += 1
+        elif getsum > tsum:
+            low += 1
+        else:
+            zz = [i for i in range(low, high+1)]
+            low += 1 #为了使循环继续，需要使low += 1
+            res.append(zz)
+    return res
 
-
-
-
-
-
-
+print Find_Lianxu_Xulie(50)
+#结果：[[8, 9, 10, 11, 12], [11, 12, 13, 14]]
 
 
