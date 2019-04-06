@@ -31,7 +31,7 @@ class Solution:
             node = head
             while node: #只要node不为空
                 h.append(node.val)
-                #或者h.append(node)
+                #h.append(node) 有时不能直接用node，大部分情况需要用node.val
                 node = node.next
         
         if not h: #忽略了[ [] ]的形式
