@@ -11,6 +11,9 @@
 #题目8：快手笔试2-非递减序列
 #题目9：牛客网-剑指offer刷题-和为S的两个数子
 #题目10：牛客网-剑指offer刷题-和为S的连续正数序列
+#题目11：广度优先搜索BFS
+#题目12：深度优先搜索DFS
+#题目13：广度优先搜索BFS的另外用法-从起始点到终止点的最短路径
 
 
 #题目1：今日头条笔试——最小找零硬币数
@@ -357,5 +360,132 @@ def Find_Lianxu_Xulie(tsum):
 
 print Find_Lianxu_Xulie(50)
 #结果：[[8, 9, 10, 11, 12], [11, 12, 13, 14]]
+
+#########################################################################
+    
+#题目11：广度优先搜索BFS
+#题目表述：给定图，按照BFS输出,图的形式见图BFS-DFS.png
+#思路：用队列queue方式实现，队列特点：先入先出
+#   起始元素A，输出：ABCDEF
+#   起始元素E，输出：ECDABF    
+
+def BFS(graph, s_ele):#说明graph图，s_ele输入起始元素
+    queue = []
+    queue.append(s_ele)
+    seen = set() #用于存放出现过的元素
+    seen.add(s_ele)
+    
+    while len(queue) > 0:
+        v = queue.pop(0)#注意pop(0)，把queue中第一个元素弹出
+        nodes = graph[v]
+        for w in nodes:
+            if w not in seen:
+                queue.append(w)
+                seen.add(w)
+        print v
+
+if __name__ == "__main__":
+    graph= {
+        "A":["B", "C"],
+        "B":["A","C","D"],
+        "C":["A", "B", "D", "E"],
+        "D":["B", "C","E","F"],
+        "E":["C","D"],
+        "F":["D"]
+        }
+
+    BFS(graph, "C")
+
+#########################################################################
+    
+#题目12：深度优先搜索DFS
+#题目表述：给定图，按照DFS输出,图的形式见图BFS-DFS.png
+#思路：用栈statc方式实现，栈的特点：先入后出，后入先出
+#   只需把BFS的pop(0)，改为pop()即可
+#   起始元素A，输出：ACEDFB
+#   起始元素E，输出：EDFBAC
+
+def DFS(graph, s_ele):#说明graph图，s_ele输入起始元素
+    stack = [] 
+    stack.append(s_ele)
+    seen = set() #用于存放出现过的元素
+    seen.add(s_ele)
+    
+    while len(stack) > 0:
+        v = stack.pop()#注意pop()，把stack中最后一个元素弹出,栈先入后出
+        nodes = graph[v]
+        for w in nodes:
+            if w not in seen:
+                stack.append(w)
+                seen.add(w)
+        print v
+
+if __name__ == "__main__":
+    graph= {
+        "A":["B", "C"],
+        "B":["A","C","D"],
+        "C":["A", "B", "D", "E"],
+        "D":["B", "C","E","F"],
+        "E":["C","D"],
+        "F":["D"]
+        }
+
+    DFS(graph, "A")
+
+#########################################################################
+    
+#题目13：广度优先搜索BFS的另外用法-从起始点到终止点的最短路径
+#题目表述：给定图，按照BFS输出,图的形式见图BFS-DFS.png
+#思路：树的结构，用字典实现  
+
+def BFS_minpath(graph, s_ele):#说明graph图，s_ele输入起始元素
+    queue = []
+    queue.append(s_ele)
+    seen = set() #用于存放出现过的元素
+    seen.add(s_ele)
+    
+    parent = {s_ele : "None"} #初始化字典，起始元素，根节点，前面无父节点
+    
+    while len(queue) > 0:
+        v = queue.pop(0)#注意pop(0)，把queue中第一个元素弹出
+        nodes = graph[v]
+        for w in nodes:
+            if w not in seen:
+                queue.append(w)
+                seen.add(w)
+                parent[w] = v#记录每个点的前一个节点
+    #    print v
+    return parent
+
+
+if __name__ == "__main__":
+    graph= {
+        "A":["B", "C"],
+        "B":["A","C","D"],
+        "C":["A", "B", "D", "E"],
+        "D":["B", "C","E","F"],
+        "E":["C","D"],
+        "F":["D"]
+        }
+
+    parent = BFS_minpath(graph, "E")
+    
+    for key in parent: #比较清晰的查看每个点的父节点
+        print key + ":" + parent[key]
+    print "------------------------"
+    #输出最短路径，例如从B到E，输出BCE，行走路径E -> C -> B
+    start = "B"#设置起始点
+    while start != "None":
+        print start
+        start = parent[start]
+
+
+
+
+
+
+
+
+
 
 
