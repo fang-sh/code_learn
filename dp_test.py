@@ -125,6 +125,50 @@ if __name__ == "__main__":
     n = 1024 - a
     print mincoins(coins, n)   
 
+#########################################################################
+
+#题目4：动态规划—最长回文子串
+    
+#--------------------- 
+#作者：华软小白 
+#来源：CSDN 
+#原文：https://blog.csdn.net/chenhua1125/article/details/80395873 
+#版权声明：本文为博主原创文章，转载请附上博文链接！    
+
+class Solution(object):
+    def longestPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        # 使用动态规划，用空间换时间，把问题拆分
+        # 获取字符串s的长度
+        str_length = len(s)
+        # 记录最大字符串长度
+        max_length = 0
+        # 记录位置
+        start = 0
+        # 循环遍历字符串的每一个字符
+        for i in range(str_length):
+            # 如果当前循环次数-当前最大长度大于等于1  并  字符串[当前循环次数-当前最大长度-1:当前循环次数+1]  == 取反后字符串
+            if i - max_length >= 1 and s[i-max_length-1: i+1] == s[i-max_length-1: i+1][::-1]:
+                # 记录当前开始位置
+                start = i - max_length - 1
+                # 取字符串最小长度为2，所以+=2，s[i-max_length-1: i+1]
+                max_length += 2
+                continue
+            # 如果当前循环次数-当前最大长度大于等于0  并  字符串[当前循环次数-当前最大长度:当前循环次数+1]  == 取反后字符串
+            if i - max_length >= 0 and s[i-max_length: i+1] == s[i-max_length: i+1][::-1]:
+                start = i - max_length
+                # 取字符串最小长度为1，所以+=1，s[i-max_length: i+1]
+                max_length += 1
+        # 返回最长回文子串
+        return s[start: start + max_length]
 
 
+if __name__ == '__main__':
+    s = "babad"
+    # s = "cbbd"
+    sl = Solution()
+    print(sl.longestPalindrome(s))
 

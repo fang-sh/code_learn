@@ -51,7 +51,28 @@ class Solution:
                 
             
 
+#########################################################################
+    
+#题目2：堆栈-判断括号是否匹配
+#题目表述：给定字符串，只包含()[]{}
+#例如：输入："([{[]}])" 输出：True
+#     输如："{()})" 输出False
+#思路:用堆栈stack
+        
+def isValid(s):
+    stack = []
+    par_dict = {")":"(", "]":"[", "}":"{"}
+    
+    for char in s:
+        if char not in par_dict:
+            stack.append(char)
+        elif not stack or dict[char] != stack.pop():
+            return False
+    return True
 
+s="({{})})"
+print isValid(s)
+                
 
 
 
