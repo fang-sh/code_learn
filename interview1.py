@@ -479,6 +479,45 @@ if __name__ == "__main__":
         print start
         start = parent[start]
 
+#########################################################################
+    
+#题目14：堆排序-前k个最大值
+import heapq
+import random
+
+class TopKHeap(object):
+    def __init__(self,k):
+        self.k=k
+        self.data=[]
+        
+    def Push(self,elem):
+        if len(self.data)<self.k:
+            heapq.heappush(self.data, elem)
+        else:
+            topk_small = self.data[0]#查看堆中最小的值，不弹出
+            print topk_small
+            if elem > topk_small:
+                heapq.heapreplace(self.data, elem) #弹出一个最小的值，然后将item插入到堆当中。堆的整体的结构不会发生改变。
+                print '&',self.data
+    
+    def TopK(self):
+        return [x for x in reversed([heapq.heappop(self.data) for x in xrange(len(self.data))])]
+    
+            
+if __name__ == "__main__":
+    print "Hello"
+    list_rand = random.sample(xrange(1000),10)
+    #list_rand = [57,65,8,59,33,23,62,25,92,31]
+    #print '*',heapq.nlargest(5,list_rand)
+    #list_rand=[100,84,71,60,23,12,29,1,37,4]
+    #list_rand=[3,4,8,9,2,3,4]
+    
+    th = TopKHeap(3)
+    
+    for i in list_rand:
+        th.Push(i)
+        
+    print th.TopK()        
 
 
 
