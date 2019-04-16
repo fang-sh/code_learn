@@ -73,13 +73,94 @@ def isValid(s):
 s="({{})})"
 print isValid(s)
                 
+#########################################################################
+    
+#题目3：剑指offer-反转链表
+#题目表述：给定链表，反转输出
+#例如：输入：1->2->3->4->5
+#     输出：1<-2<-3<-4<-5
+#思路:
 
+def ReverseList(pHead):
+    # write code here
+    if not pHead:
+        return None
+    last = None #定义一个空值
+    while pHead:
+        tmp = pHead.next
+        pHead.next = last
+        last = pHead
+        pHead = tmp
+    return last
 
+#########################################################################
+    
+#题目4：剑指offer-两个有序链表，拼接成有序链表输出
+#题目表述：
+#例如：输入：1->3->5     2->4->6
+#     输出：1->2->3->4->5->6
 
+#法一：不推荐
+# -*- coding:utf-8 -*-
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+import heapq #使用python自带堆模块heapq
+class Solution:
+    # 返回合并后列表
+    def Merge(self, pHead1, pHead2):
+        # write code here
+        h = []
+        while pHead1:#当pHead中的值不为空时
+            h.append(pHead1.val) #取出链表中当前值
+            pHead1 = pHead1.next #指向下一个元素
+            
+        while pHead2:
+            h.append(pHead2.val)
+            pHead2 = pHead2.next
+            
+        if not h: #如果列表为空，返回None
+            return None
+        heapq.heapify(h) #将列表h转为最小堆
+        
+        #以下为构建链表过程，并返回链表头结点
+        root = ListNode(heapq.heappop(h)) #根节点，弹出最小堆的根节点，即弹出最小值
+        curnode = root #当前指针指向根节点
+        
+        while h:#当最小堆不为空时
+            nextnode = ListNode(heapq.heappop(h)) #取出下一个最小值
+            curnode.next = nextnode #指针指向下一节点
+            curnode = nextnode #指针指向下一节点
+        return root #返回链表的根结点
 
+#法二：推荐
+# -*- coding:utf-8 -*-
 
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+class Solution:
+    # 返回合并后列表
+    def Merge(self, pHead1, pHead2):
+        # write code here
 
-
-
-
+        head = ListNode(None)
+        p = head
+        while pHead1 and pHead2:
+            if pHead1.val >= pHead2.val:
+                head.next = pHead2
+                pHead2 = pHead2.next
+            else:
+                head.next = pHead1
+                pHead1 = pHead1.next
+            
+            head = head.next #记住此处
+        
+        if pHead1 and not pHead2:
+            head.next = pHead1
+        if pHead2 and not pHead1:
+            head.next = pHead2
+        return p.next
 
