@@ -16,6 +16,9 @@
 #题目13：广度优先搜索BFS的另外用法-从起始点到终止点的最短路径
 #题目14：堆排序-前k个最大值
 #题目15：Python中的深copy和浅copy，以及赋值
+#题目16：三数之和
+#题目17：荷兰国旗问题
+#题目18：牛客网-判断是否为旋转后的字符串
 
 
 #题目1：今日头条笔试——最小找零硬币数
@@ -546,6 +549,72 @@ print "d:",d
 #b: [1, 2, 3, ['a', 'b', 'c'], 5, 6]
 #c: [1, 2, 3, ['a', 'b', 'c']]
 #d: [1, 2, 3, ['a', 'b']]
+
+#########################################################################
+
+#题目16：三数之和
+
+A = [1,2,3,4,5,6,7,8,9,10,11,12,13]
+target = 10
+i = 0
+for i in range(len(A)):
+    a = A[i]
+    k = i + 1
+    g = len(A) -1
+    while k < g:
+        if (k<g) and A[k] + A[g] > target-A[i]:
+            g -= 1
+        elif (k<g) and A[k] + A[g] < target-A[i]:
+            k += 1
+        elif (k<g) and A[k] + A[g] == target-A[i]:
+            print A[i], A[k], A[g]
+            k += 1 #使程序继续往后运行
+
+#########################################################################
+
+#题目17：荷兰国旗问题-在[left,right]对数组A按照num划分
+#题目描述：只有3个数，比如0,1,2 无序排列，每个数的数量不确定。限定时间、空间复杂度，
+#        使0都放在1左边，2都放在1右边
+#思路：三个指标，less = -1，cur 当前指针，more = len(A)
+
+def partition(A, num, left, right):
+    cur = left #初始cur = left = 0
+    less = left - 1 #初始less = -1
+    more = right + 1 #初始more = len(A)
+    
+    while cur < more:
+        if A[cur] < num: #A[cur] < 1
+            less += 1 #先执行指针+1
+            A[cur],A[less] = A[less],A[cur]
+            cur += 1 #仅在<num是cur+1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+        elif A[cur] > num:
+            more -= 1
+            A[cur],A[more] = A[more],A[cur] #注意：不进行cur+1
+        else: #A[cur] == num
+            cur += 1
+    return A
+            
+if __name__ == "__main__":
+    A=[2,1,0,1,1,0,1,2,0,0,2,1,1,2]
+    print A
+    print partition(A,1,0,len(A)-1)
+           
+#########################################################################
+
+#题目18：牛客网-判断是否为旋转后的字符串
+#题目描述：如原始字符串s="abcef",判断 bcefa是其旋转数组，cefba不是其旋转数组
+#思路：将两个字符串s拼接abcefabcef,则只要判断bcefa是否在abcefabcef中即可
+
+
+s1="abcef"
+s2="cefab"
+
+a = s1+s1
+if s2 in a:
+    print True,"s2是s1的一个旋转字符串"
+else:
+    print False,"s2不是s1的一个旋转字符串"
+
 
 
 
