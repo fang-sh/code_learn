@@ -44,13 +44,72 @@ def Quick_sort(array, start, end):
         Quick_sort(array, start, i-1)
         Quick_sort(array, j+1, end)
     return array
-                  
+
+#两个有序数组的归并排序
+def Guibing_sort(array):
+    A = [2,2,5]
+    B = [1,2,3,4, 7, 10, 13]
+
+    C = [] #初始化
+    ai = 0 #初始化
+    bi = 0 #初始化
+    while ai < len(A) and bi < len(B):
+        if A[ai] >= B[bi]: #
+            C.append(B[bi])
+            bi += 1
+#        elif A[ai] < B[bi]:
+        else:
+            C.append(A[ai])
+            ai += 1
+
+    if ai !=len(A): #如果A有剩余，已经排好序,直接附加到C后面
+        C = C + A[ai :]
+    if bi != len(B):
+        C= C + B[bi :]
+    print('两个有序数组的归并排序:', C)
+
+#堆排序
+import heapq 
+
+def heapq_sort(array):
+    heapq.heapify(array) #将列表转化为最小堆结构
+    #输出最大的k个值,k值可自定义，如k=3
+    k = len(array)
+    large_list = heapq.nlargest(k, array)
+    #输出最小的k个值
+    small_list = [heapq.heappop(array) for _ in range(k)]
+    print("数组中最大的k个值为: ", large_list)
+    print("数组中最小的k个值为: ", small_list)
+              
 
 if __name__ == "__main__":
 #    array = [10, 18, 7, 26, 31, 65, 93, 36]
-    array = [1, 4, 7, 1, 5, 5, 3, 85, 34, 75, 23, 75, 2, 0]
-    print('冒泡排序：', Bubble_sort(array))
-    print('快速排序：', Quick_sort(array, 0, len(array)-1))
+#    array = [1, 4, 7, 1, 5, 5, 3, 85, 34, 75, 23, 75, 2, 0]
+#    print('冒泡排序：', Bubble_sort(array))
+#    print('快速排序：', Quick_sort(array, 0, len(array)-1))
+#    heapq_sort(array)
+    A = [1,3,7,34,54]
+    B = [2,5,9,10,18,24,76]
+    C = []
+    i = 0
+    j = 0
+    
+    while i<len(A) and j<len(B):
+        if A[i] < B[j]:
+            C.append(A[i])
+            i = i+1
+        else:
+            C.append(B[j])
+            j = j+1
+    print(i, len(A))
+    print(j, len(B))
+    if i < len(A):
+        C = C + A[1 :]
+    if j < len(B):
+        C = C + B[j :]
+    print(C)
+            
+
 
 
 
