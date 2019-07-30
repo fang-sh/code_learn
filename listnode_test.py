@@ -167,3 +167,42 @@ class Solution:
             head.next = pHead2
         return p.next
 
+#法三：没有法二好
+
+# -*- coding:utf-8 -*-
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+import heapq #使用python自带堆模块heapq
+class Solution:
+    # 返回合并后列表
+    def Merge(self, pHead1, pHead2):
+        # write code here
+        h = []
+        while pHead1 and pHead2:
+            if pHead1.val < pHead2.val:
+                h.append(pHead1.val)
+                pHead1 = pHead1.next
+            else:
+                h.append(pHead2.val)
+                pHead2 = pHead2.next
+        
+        while pHead1:
+            h.append(pHead1.val)
+            pHead1 = pHead1.next
+        
+        while pHead2:
+            h.append(pHead2.val)
+            pHead2 = pHead2.next
+        
+        if not h:
+            return None
+        #把list转成链表形式
+        root = ListNode(h[0])
+        curnode = root
+        for i in range(1, len(h)):
+            nextnode = ListNode(h[i])
+            curnode.next = nextnode
+            curnode = nextnode
+        return root 
