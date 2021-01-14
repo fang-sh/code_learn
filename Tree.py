@@ -5,8 +5,9 @@
 # 题目1：给定一个二叉树的根节点，返回它的前序遍历
 # 题目2：给定一个二叉树的根节点，返回它的中序遍历
 # 题目3：给定一个二叉树的根节点，返回它的后序遍历
-# 题目4：二叉树搜索树（左叶子节点值均大于root值，右 leaf都小于root）, leetcode 700
-# 题目5：二叉树的深度
+# 题目4：二叉树搜索树（左叶子节点值均大于root值，右 leaf都小于root. 二叉搜索树的中序遍历为 递增序列）, leetcode 700
+# 题目5：二叉树的深度 剑指offer 55
+# 题目6: 二叉搜索树的第k大节点（知识点：获取树的val，保存到list中）剑指offer 54
 
 
 
@@ -78,7 +79,7 @@ class Solution:
         return res
 
 
-# 题目4：二叉树搜索树（左叶子节点值均大于root值，右 leaf都小于root）, leetcode 700
+# 题目4：二叉树搜索树（左叶子节点值均大于root值，右 leaf都小于root.  二叉搜索树的中序遍历为 递增序列）, leetcode 700
 # 题目描述：给定二叉搜索树（BST）的根节点和一个值。 你需要在BST中找到节点值等于给定值的节点。 返回以该节点为根的子树。 如果节点不存在，则返回 NULL。
 # 法一：递归  法二：迭代
 class Solution:
@@ -119,3 +120,29 @@ class Solution:
         return max(left_depth, right_depth)
 
 
+# 题目6: 二叉搜索树的第k大节点（知识点：获取树的val，保存到list中）剑指offer 54
+# 本文解法基于此性质：二叉搜索树的中序遍历为 递增序列 。
+
+# 打印中序遍历
+def dfs(root):
+    if not root: return
+    dfs(root.left)  # 左
+    print(root.val) # 根
+    dfs(root.right) # 右
+
+作者：jyd
+链接：https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-di-kda-jie-dian-lcof/solution/mian-shi-ti-54-er-cha-sou-suo-shu-de-di-k-da-jie-d/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+class Solution:
+    def kthLargest(self,root, k):
+        res = [] #存放节点值
+        def dfs(root, res):
+            if not root:
+                return
+            dfs(root.left, res)
+            res.append(root.val)
+            dfs(root.right, res)
+        dfs(root, res)
+        return res[-k]
+            
