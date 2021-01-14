@@ -1,4 +1,4 @@
-# 基础二分查找
+# 基础二分查找, 二分查找前提：A一定是排好序的
 def binarySearch(A, target):
     low,high = 0,len(A)-1
     while low <= high:
