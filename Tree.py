@@ -8,7 +8,7 @@
 # 题目4：二叉树搜索树（左叶子节点值均大于root值，右 leaf都小于root. 二叉搜索树的中序遍历为 递增序列）, leetcode 700
 # 题目5：二叉树的深度 剑指offer 55
 # 题目6: 二叉搜索树的第k大节点（知识点：获取树的val，保存到list中）剑指offer 54
-
+# 题目7：翻转二叉树
 
 
 
@@ -145,4 +145,13 @@ class Solution:
             dfs(root.right, res)
         dfs(root, res)
         return res[-k]
-            
+
+# 题目7：翻转二叉树
+class Solution:
+    def invertTree(self, root: TreeNode) -> TreeNode:
+        if not root:
+            return root
+        root.left, root.right = root.right, root.left
+        self.invertTree(root.left)
+        self.invertTree(root.right)
+        return root   
