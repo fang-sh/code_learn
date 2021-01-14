@@ -9,6 +9,9 @@
 # 题目5：二叉树的深度 剑指offer 55
 # 题目6: 二叉搜索树的第k大节点（知识点：获取树的val，保存到list中）剑指offer 54
 # 题目7：翻转二叉树
+# 题目8：打印按照前序，中序，后序遍历顺序二叉树的值
+# 题目9：创建BST 二叉搜索树
+# 题目10: 找到树的最大值
 
 
 
@@ -155,3 +158,87 @@ class Solution:
         self.invertTree(root.left)
         self.invertTree(root.right)
         return root   
+
+
+# 题目8：打印按照前序，中序，后序遍历顺序二叉树的值
+# 记住树的这种写法
+def preOrder(root):
+    if not root:
+        return
+    print(root.val)
+    preOrder(root.left)
+    preOrder(root.right)
+  
+# 对于BST二叉搜索树，中序遍历是按照从小到大顺序排好顺序的  
+def inOrder(root):
+    if not root: 
+        return
+    inOrder(root.left)
+    print(root.val)
+    inOrder(root.right)
+    
+def postOrder(root):
+    if not root: 
+        return
+    postOrder(root.left)
+    postOrder(root.right)
+    print(root.val)
+    
+
+# 题目9：创建BST 二叉搜索树
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None  
+        self.right = None
+        
+def creatBST(nums):
+    root = None
+    for n in nums:
+        root = insert(root, n)
+    return root
+    
+def insert(root, val):
+    if not root:
+        return TreeNode(val)
+    if root.val >= val:
+        root.left = insert(root.left, val)
+    else:
+        root.right = insert(root.right, val)
+    return root
+    
+def inorder(root):
+    if not root: 
+        return
+    inorder(root.left)
+    print(root.val)
+    inorder(root.right)
+
+# 调用方法
+root = creatBST([5,3,1,4,7,6])
+inorder(root)
+            
+ 
+ # 题目10: 找到树的最大值
+ # 法一：传统方式，不建议
+ def maxVal(root):
+
+     ans = traverse(root)
+     return ans  
+ 
+ def traverse(root):
+     ans = None
+     if not root: 
+        return ans
+     ans = max(ans, root.val)
+    traverse(root.left)
+    traverse(root.right)
+    return ans
+            
+# 法二：递归方式，推荐
+def maxVal(root):
+    if not root: 
+        return None
+    max_left = maxVal(root.left) # 左子树最大值
+    max_right = maxVal(root.right) # 右子树最大值
+    return max(root.val, max_left, max_right) # 最大值一定来自这三个值
