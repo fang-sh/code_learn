@@ -12,6 +12,7 @@
 # 题目8：打印按照前序，中序，后序遍历顺序二叉树的值
 # 题目9：创建BST 二叉搜索树
 # 题目10: 找到树的最大值
+# 题目11: 二叉堆属性：完全二叉树。最大(小)二叉堆，最大(小)值。时间复杂度nlog(n)
 
 
 
@@ -242,3 +243,4 @@ def maxVal(root):
     max_left = maxVal(root.left) # 左子树最大值
     max_right = maxVal(root.right) # 右子树最大值
     return max(root.val, max_left, max_right) # 最大值一定来自这三个值
+

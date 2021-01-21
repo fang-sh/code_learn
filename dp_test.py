@@ -106,6 +106,17 @@ a4 = (n1 % 64) % 16 % 4
 mincoins_sum = a1 + a2 + a3 + a4
 print mincoins_sum
 
+# 贪心算法
+rmb = [200, 100, 20, 10, 5, 1]
+num = 6
+x = 628
+c = 0
+for i in range(num):
+    use = x // rmb[i]
+    c += use
+    x = x - rmb[i]*use
+print(c)
+
 #思路二：动态规划程序
 def mincoins(coins,n):
     if n < 0:
