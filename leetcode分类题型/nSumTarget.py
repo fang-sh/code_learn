@@ -121,7 +121,7 @@ def threeSumTarget(nums, start, target):
             v.append(nums[i])
             res.append(v)
         while i<length-1 and nums[i]==nums[i+1]: i+= 1
-        i += 1
+        i += 1 # 进行下一步迭代
     return res
 
 #########################################################################
@@ -147,8 +147,10 @@ def fourSumTarget(nums, start, target):
             v.append(nums[i])
             res.append(v)
         while i<length-1 and nums[i]==nums[i+1]: i+= 1
-        i += 1
+        i += 1 # 进行下一步迭代
     return res
+
+#########################################################################
 
 """
 题目5：n数之和-通用,100数之和，4数之和可以直接用该通用型
@@ -199,9 +201,6 @@ def nSumTarget(nums, n, start, target):
                 v.append(nums[i])
                 res.append(v)
             while i<length-1 and nums[i]==nums[i+1]: i += 1
-            i += 1
+            i += 1 # 进行下一步迭代
     return res
-        
-    
-
 
