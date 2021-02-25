@@ -69,7 +69,7 @@ def isValid(s):
     for char in s:
         if char not in par_dict:
             stack.append(char)
-        elif not stack or dict[char] != stack.pop():
+        elif not stack or par_dict[char] != stack.pop():
             return False
     return True
 
