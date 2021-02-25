@@ -68,11 +68,13 @@ def twoSumTarget(nums, target):
         right = nums[j]
         # 根据 sum 和 target 的比较，移动左右指针
         if sum_v < target:
-            while i<j and nums[i]==left: # 跳过所有重复的元素
-                i += 1 
+            i += 1
+            # while i<j and nums[i]==left: # 跳过所有重复的元素
+            #     i += 1 
         elif sum_v > target:
-            while i<j and nums[j]==right: # 跳过所有重复的元素
-                j -= 1 
+            j -= 1
+            # while i<j and nums[j]==right: # 跳过所有重复的元素
+            #     j -= 1 
         else:
             r.append([nums[i], nums[j]])
             while i<j and nums[i]==left: i += 1  # 跳过所有重复的元素
@@ -99,11 +101,13 @@ def twoSumTarget(nums, start, target):
         right = nums[j]
         
         if sum_v < target:
-            while i<j and nums[i]==left:
-                i += 1
+            i += 1
+            # while i<j and nums[i]==left:
+            #     i += 1
         elif sum_v > target:
-            while i<j and nums[j]==right:
-                j -= 1
+            j -= 1
+            # while i<j and nums[j]==right:
+            #     j -= 1
         else:
             r.append([nums[i], nums[j]])
             while (i<j and nums[i]==left): i += 1
@@ -173,15 +177,13 @@ def nSumTarget(nums, n, start, target):
             left = nums[i]
             right = nums[j]
             if left + right < target:
-                while i<j and nums[i]==left:
-                    i += 1
+                i += 1
             elif left + right > target:
-                while i<j and nums[j]==right:
-                    j -= 1
+                j -= 1
             else:
                 r.append([nums[i], nums[j]])
-                while (i<j and nums[i]==left): i += 1
-                while (i<j and nums[j]==right): j -= 1
+                while (i<j and nums[i]==left): i += 1 # 重复值去重 
+                while (i<j and nums[j]==right): j -= 1 # 重复值去重
         return r
     
     nums.sort() #排序
@@ -191,7 +193,8 @@ def nSumTarget(nums, n, start, target):
     if n < 2 or length < n:
         return res
     if n == 2:
-        sub = twoSumTarget(nums, start, target)
+        sub = twoSumTarget(nums, start, target) # &&&&&注意&&&&&:此处为start， 不是i+1
+        # sub = twoSumTarget(nums, i, target) # 也可以用i，因为上面定义了i=start
         for v in sub:
             res.append(v)
     else:
