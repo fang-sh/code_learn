@@ -186,6 +186,27 @@ if __name__ == '__main__':
     sl = Solution()
     print(sl.longestPalindrome(s))
 
+
+"""
+题目4：5. 最长回文子串 leetcode
+"""
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        res = ''
+        for i in range(len(s)):
+            s1 = self.find(s, i, i) # 找到以s[i]为中心的最长回文子串（假设长度为奇数）
+            s2 = self.find(s, i, i+1) # 找到以s[i]和s[i+1]为中心的回文串（假设长度为偶数）
+            # res = max([len(res), len(s1), len(s2)]) # res = longest(res, s1, s2)
+            res = s1 if len(res)<len(s1) else res
+            res = s2 if len(res)<len(s2) else res
+        return res
+
+    def find(self, s, left, right):
+        """找到串s中，以left、right为中心的最长回文串"""
+        while left >= 0 and right < len(s) and s[left] == s[right]:
+            left -= 1
+            right += 1
+        return s[left+1: right]
 #########################################################################
 
 #题目5：动态规划—01背包问题

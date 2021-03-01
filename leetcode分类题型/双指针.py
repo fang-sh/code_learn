@@ -12,6 +12,11 @@
     题目2：83.删除排序链表中的重复元素
     题目3：27.移除元素
     题目4：283.移动零
+    
+    
+(n) 只有题目
+题目1： 11. 盛最多水的容器
+题目2：牛客网剑指offer：旋转数组的最小数字
 """
 
 ------------------------（1）-------------------------------
@@ -280,9 +285,43 @@ def moveZeroes(nums):
     nums[:] = nums + [0]*n # 注意：leetcode中是原数组修改，直接nums = nums + [0]*n会报错
     return nums # leetcode不需要return
 
+------------------------（n）-------------------------------
+"""
+题目1：盛水最多的容器
+"""
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        left = 0
+        right = len(height) - 1
+        max_vol = 0
+        while left < right:
+            cur = (right-left) * min(height[left], height[right])
+            max_vol = max(max_vol, cur)
+            if height[left] <= height[right]: # 右边更高，固定右边，移动左边，寻找左边高点
+                left += 1
+            else: # 左边更高，固定左边，移动右边，寻找右边高点
+                right -= 1
+        return max_vol
 
 
 
-
-
-
+"""
+题目2：牛客网剑指offer：旋转数组的最小数字
+"""
+# -*- coding:utf-8 -*-
+class Solution:
+    def minNumberInRotateArray(self, rotateArray):
+        # write code here
+        if not rotateArray:
+            return 0
+        left = 0
+        right = len(rotateArray)-1
+        while left < right:
+            mid = left + (right-left)//2
+            if rotateArray[mid]>rotateArray[right]: # 可以把[1,2,3,4,5,6,7]所有旋转数组写出来，判断应该left = mid + 1
+                left = mid + 1
+            elif rotateArray[mid]<rotateArray[right]:
+                right = mid
+            else:
+                right -= 1
+        return rotateArray[left]
