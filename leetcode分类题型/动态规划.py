@@ -1,9 +1,34 @@
 """
-(1)动态规划详解（修订版）: https://mp.weixin.qq.com/s/Cw39C9MY9Wr2JlcvBQZMcA
-    题目1：322. 零钱兑换（3种解法），求最少零钱数
-(2)经动态规划：编辑距离 https://mp.weixin.qq.com/s/uWzSvWWI-bWAV3UANBtyOw
-    题目1：72. 编辑距离
+(1) 动态规划详解（修订版）: https://mp.weixin.qq.com/s/Cw39C9MY9Wr2JlcvBQZMcA
+        题目1：322. 零钱兑换（3种解法），求最少零钱数
+(2) 经动态规划：编辑距离 https://mp.weixin.qq.com/s/uWzSvWWI-bWAV3UANBtyOw
+        题目1：72. 编辑距离
+(3) 动态规划套路：最大子数组和: https://mp.weixin.qq.com/s/nrULqCsRsrPKi3Y-nUfnqg
+        题目1：53. 最大子序和
+(4) 从最长递增子序列学会如何推状态转移方程: https://mp.weixin.qq.com/s/7QFapCuvi-2nkh6gREcR9g
+        题目1：300. 最长递增子序列
+(5) 最长递增子序列之信封嵌套问题: https://mp.weixin.qq.com/s/PSDCjKlTh8MtANdgi-QIug
 
+(6) 详解最长公共子序列问题，秒杀三道动态规划题目: https://mp.weixin.qq.com/s/ZhPEchewfc03xWv9VP3msg
+        题目1：1143.最长公共子序列（Medium）
+        题目2：583. 两个字符串的删除操作（Medium）
+        题目3：712.两个字符串的最小ASCII删除和（Medium）
+        
+        （比较难理解，以后有时间做）
+(7) 子序列解题模板：最长回文子序列：https://mp.weixin.qq.com/s/zNai1pzXHeB2tQE6AdOXTA
+        题目1：5. 最长回文子串(动态规划法不会)
+
+(8) 经典动态规划：0-1背包问题的变体: https://mp.weixin.qq.com/s/OzdkF30p5BHelCi6inAnNg
+        题目1：416. 分割等和子集
+
+
+
+
+
+
+(n) (强烈推荐)B站视频讲解动态规划：https://www.bilibili.com/video/BV12W411v7rd/?spm_id_from=333.788.recommend_more_video.-1
+        题目1：动态规划——找不相邻位置元素和的最大值。198.打家劫舍(leetcode)
+        题目2：198.打家劫舍(leetcode)
 """
 
 ------------------------（1）-------------------------------
@@ -67,26 +92,216 @@ def coinChange(coins, amount):
 ------------------------（2）-------------------------------          
  """
  题目1：72. 编辑距离
- """           
+
+参考链接： 
+    作者：powcai
+    链接：https://leetcode-cn.com/problems/edit-distance/solution/zi-di-xiang-shang-he-zi-ding-xiang-xia-by-powcai-3/
+    来源：力扣（LeetCode）
+    著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+ """
+ # 法一：暴力递归，自顶向下,超时        
+def minDistance(word1, word2):
+    def dp(i, j):
+        if i == -1:
+            return j + 1
+        if j == -1:
+            return i + 1
+        if word1[i] == word2[j]:
+            return dp(i-1, j-1)
+        else:
+            # inserted = dp(i, j + 1) # 插入一个字符
+            # deleted = dp(i + 1, j) # 删除一个字符
+            # replaced = dp(i + 1, j + 1) # 替换一个字符
+            # return 1 + min(inserted, deleted, replaced)
+            return min(
+                dp(i, j-1) + 1, # 插入一个字符
+                dp(i-1, j) + 1, # 删除一个字符
+                dp(i-1, j-1) + 1 # 替换一个字符
+            )
+    return dp(len(word1)-1, len(word2)-1)
+
+# (推荐)法二：带备忘录的递归，自顶向下
+def minDistance(word1, word2):
+    memo = {}
+    def dp(i, j):
+        if (i, j) in memo:
+            return memo[(i, j)]
+        if i == -1:
+            return j + 1
+        if j == -1:
+            return i + 1
+        if word1[i] == word2[j]:
+            memo[(i, j)] = dp(i-1, j-1)
+        else:
+            memo[(i, j)] = min(
+                dp(i, j-1) + 1,
+                dp(i-1, j) + 1,
+                dp(i-1, j-1) + 1
+            )
+        return memo[(i, j)]
+    return dp(len(word1)-1, len(word2)-1)
+
+# （推荐）法三：dp table 动态规划，自底向上
+def minDistance(word1, word2):
+    m, n = len(word1), len(word2) 
+    dp = [[0]*(n+1) for _ in range(m+1)] # m行, n列
+    # 第一行
+    for i in range(n+1):
+        dp[0][i] = i 
+    # 第1列
+    for j in range(m+1):
+        dp[j][0] = j
+    # 自底向上求解
+    for i in range(1, m+1):
+        for j in range(1, n+1):
+            if word1[i-1] == word2[j-1]:
+                dp[i][j] = dp[i-1][j-1]
+            else:
+                dp[i][j] = min(
+                    dp[i-1][j]+1,
+                    dp[i][j-1]+1,
+                    dp[i-1][j-1] + 1
+                )
+    return dp[m][n]
+
+------------------------（3）-------------------------------
+"""
+题目1：53. 最大子序和
+"""
+# (推荐)法一：动态规划，时间复杂度O(n)，空间复杂度O(n)
+def maxSubArray(nums):
+    if not nums:
+            return 0
+    dp = [float('inf')] * len(nums)
+    dp[0] = nums[0]
+    for i in range(1, len(nums)):
+        A = nums[i] # 连续子数组，要么从i开始，重新计算
+        B = dp[i-1] + nums[i] # 连续子数组，要么前i-1的最大值dp[i-1]+nums[i]
+        dp[i] = max(A, B)
+    print(dp)
+    # 找到最大子数组
+    return max(dp)
+# 法二：状态压缩
+def maxSubArray(nums):
+    if not nums:
+            return 0
+    dp_0 = nums[0]
+    dp_1 = 0
+    res = dp_0
+    for i in range(1, len(nums)):
+        dp_1 = max(nums[i], nums[i]+dp_0)
+        dp_0 = dp_1
+        res = max(res, dp_1)
+    return res
+
+------------------------（4）-------------------------------
+"""
+题目1：300. 最长递增子序列
+题目要求：严格递增
+法一，法二都要会
+"""
+# 法一：动态规划，时间复杂度O(n^2),4000ms
+def lengthOfLIS(nums):
+    if not nums:
+            return 0
+        dp = [1] * len(nums) # 至少为1
+        # dp[0] = 1
+        for i in range(len(nums)):
+            for j in range(i):
+                if nums[j] < nums[i]: # 如果要求非严格递增，将此行 '<' 改为 '<=' 即可。
+                    A = dp[j] + 1 # 选择nums[i]
+                    B = dp[i] # 不选nums[i]
+                    dp[i] = max(A, B)
+        # print(dp)
+        return max(dp) # 选择dp中最大的值
+# (面试应该会问该法)法二：动态规划 + 二分查找，时间大幅加快，O(NlogN), 60ms
+def lengthOfLIS(nums):
+    top = [0] * len(nums) #要处理的扑克牌
+    res = 0 # 初始化牌堆为0
+    for i in nums:
+        left = 0
+        right = res
+
+        # 搜索左边界的二分查找(右边界闭，左开右闭)
+        while left < right:
+            mid = left + (right - left)//2
+            if top[mid] < i:
+                left = mid + 1
+            else:
+                right = mid
+            
+        # 如果没有找到合适的，新建一堆，res加一
+        if right == res:
+            res += 1
+
+        top[left] = i # 把这张牌放到牌堆顶
+    return res # 牌堆数就是 LIS 长度
+    
+------------------------（5）-------------------------------         
 
 
 
 
+------------------------（6）-------------------------------
+"""
+题目1：1143.最长公共子序列（Medium）
+"""
 
 
 
+------------------------（7）-------------------------------
+"""
+题目1：5. 最长回文子串 leetcode
+"""
+# (推荐)法一: 遍历，中心扩展法
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        res = ''
+        for i in range(len(s)):
+            s1 = self.find(s, i, i) # 找到以s[i]为中心的最长回文子串（假设长度为奇数）
+            s2 = self.find(s, i, i+1) # 找到以s[i]和s[i+1]为中心的回文串（假设长度为偶数）
+            # res = max([len(res), len(s1), len(s2)]) # res = longest(res, s1, s2)
+            res = s1 if len(res)<len(s1) else res
+            res = s2 if len(res)<len(s2) else res
+        return res
 
+    def find(self, s, left, right):
+        """找到串s中，以left、right为中心的最长回文串"""
+        while left >= 0 and right < len(s) and s[left] == s[right]:
+            left -= 1
+            right += 1
+        return s[left+1: right]
+    
+# (必须掌握)法二：动态规划
+def longestPalindrome(s):
+    目前还不会
+    
 
-
-
-
-
-
-
+------------------------（8）-------------------------------
+"""
+题目1：416. 分割等和子集
+"""
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        numSum = sum(nums)
+        if numSum % 2 != 0:
+            return False
+        
+        capacity = numSum // 2
+        if capacity < max(nums):
+            return False
+        
+        bag = [False] * (capacity+1)
+        bag[0] = True
+        for i in nums:
+            for j in range(len(bag)-1, -1, -1):
+                if j >= i:
+                    bag[j] |= bag[j-i] # bag[j] = bag[j] or bag[j-i]
+        return bag[len(bag)-1]
 
 ------------------------（2）-------------------------------
 """
-题目4：5. 最长回文子串 leetcode
+题目n：5. 最长回文子串 leetcode
 """
 class Solution:
     def longestPalindrome(self, s: str) -> str:
@@ -105,3 +320,55 @@ class Solution:
             left -= 1
             right += 1
         return s[left+1: right]
+    
+    
+    
+------------------------（n）-------------------------------
+"""
+题目n：198.打家劫舍(leetcode)
+
+动态规划——找不相邻位置元素和的最大值
+
+#题目表述：给定数组arr，求数组中不相邻元素的和sum的最大值。
+#例如：输入 arr = [1, 2, 4, 1, 7, 8, 3] 输出15
+#      输入 arr = [4, 1, 1, 9, 1] 输出13
+#   每个元素，存在选择与不选择两种情况。
+#   选择arr[i], A = opt[i-2] + arr[i]
+#   不选arr[i], B = opt[i-1] 
+#   opt[i] = max(A, B)
+#思路一（不推荐）：递归法。
+#思路二（推荐）：（动态规划）记录前i个的，每个i的最优值
+"""
+#思路一：不推荐，递归法
+def rec_opt(arr, i):
+    if i == 0:
+        return arr[0]
+    elif i == 1:
+        return max(arr[0], arr[1])
+    else:
+        A = rec_opt(arr, i-2) + arr[i]
+        B = rec_opt(arr, i)
+        return max(A, B)
+
+arr = [1, 2, 4, 1, 7, 8, 3]
+print rec_opt(arr, len(arr))
+
+#思路二：推荐，动态规划，保存前i次的最优结果
+
+def dp_opt(arr):
+    if len(arr) == 1:
+        return arr[0]
+    if len(arr) == 2:
+        return max(arr[0], arr[1])
+    
+    opt = [0] * (len(arr))
+    opt[0] = arr[0]
+    opt[1] = max(arr[0], arr[1])
+    for i in range(2, len(arr)):
+        A = opt[i-2] + arr[i]
+        B = opt[i-1]
+        opt[i] = max(A, B)
+    return opt[-1]
+
+arr = [1, 2, 4, 1, 7, 8, 3]
+print dp_opt(arr)
