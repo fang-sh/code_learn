@@ -5,6 +5,7 @@
 
 题目1：二分查找基本框架
 题目2：二分查找难点题：剑指 Offer 11. 旋转数组的最小数字
+题目3：50. Pow(x, n)（注意：面试考察 快速幂法）
 
 （重点补充，（1）中有答案）
 寻找左侧边界的二分搜索，左开右闭
@@ -62,3 +63,39 @@ class Solution:
             else:
                 right -= 1
         return nums[left]
+
+"""
+题目3：50. Pow(x, n)
+（注意：面试考察 快速幂法，字节跳动出过）
+https://leetcode-cn.com/problems/powx-n/solution/50-powx-n-kuai-su-mi-qing-xi-tu-jie-by-jyd/
+https://leetcode-cn.com/problems/powx-n/solution/er-fen-fa-pu-tong-xie-fa-yi-ji-wei-yun-s-cw8x/
+"""
+# (推荐)法一：二分查找普通写法
+def myPow(self, x: float, n: int) -> float:
+    res  = 1
+    if n < 0:
+        x = 1/x
+        n = -n # n转为正数>0
+        
+    while n: # 通过折半计算，每次把 n 减半，降低时间复杂度
+        if n%2 == 0: # n为偶数
+            x *= x
+            n /= 2
+        else:
+            res *= x
+            n -= 1
+    return res
+
+# (尽量掌握，不强求)法二：位运算+二分查找
+def myPow(self, x: float, n: int) -> float:
+    res = 1
+    if n < 0:
+        x = 1/x
+        n = -n # 转为正数
+    while n:
+        if n & 1:
+            res *= x
+        x *= x
+        n >>= 1
+    return res
+

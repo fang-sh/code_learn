@@ -20,15 +20,10 @@
 
 (8) 经典动态规划：0-1背包问题的变体: https://mp.weixin.qq.com/s/OzdkF30p5BHelCi6inAnNg
         题目1：416. 分割等和子集
+(9) 经典动态规划：完全背包问题: https://mp.weixin.qq.com/s/zGJZpsGVMlk-Vc2PEY4RPw
+        题目1：518. 零钱兑换 II
+        题目2：377. 组合总和 Ⅳ
 
-
-
-
-
-
-(n) (强烈推荐)B站视频讲解动态规划：https://www.bilibili.com/video/BV12W411v7rd/?spm_id_from=333.788.recommend_more_video.-1
-        题目1：动态规划——找不相邻位置元素和的最大值。198.打家劫舍(leetcode)
-        题目2：198.打家劫舍(leetcode)
 """
 
 ------------------------（1）-------------------------------
@@ -299,6 +294,32 @@ class Solution:
                     bag[j] |= bag[j-i] # bag[j] = bag[j] or bag[j-i]
         return bag[len(bag)-1]
 
+------------------------（9）-------------------------------
+"""
+题目1：518. 零钱兑换 II
+"""
+def change(amount, coins):
+    dp = [0] * (amount + 1) # 金额从0 ~ amount
+    dp[0] = 1
+    for c in coins: # 遍历物品
+        for amt in range(1, amount+1): # 遍历背包
+            if amt >= c:
+                dp[amt] += dp[amt - c]
+    print(dp)
+    return dp[amount]
+
+
+
+
+
+
+
+
+
+
+
+
+
 ------------------------（2）-------------------------------
 """
 题目n：5. 最长回文子串 leetcode
@@ -323,52 +344,3 @@ class Solution:
     
     
     
-------------------------（n）-------------------------------
-"""
-题目n：198.打家劫舍(leetcode)
-
-动态规划——找不相邻位置元素和的最大值
-
-#题目表述：给定数组arr，求数组中不相邻元素的和sum的最大值。
-#例如：输入 arr = [1, 2, 4, 1, 7, 8, 3] 输出15
-#      输入 arr = [4, 1, 1, 9, 1] 输出13
-#   每个元素，存在选择与不选择两种情况。
-#   选择arr[i], A = opt[i-2] + arr[i]
-#   不选arr[i], B = opt[i-1] 
-#   opt[i] = max(A, B)
-#思路一（不推荐）：递归法。
-#思路二（推荐）：（动态规划）记录前i个的，每个i的最优值
-"""
-#思路一：不推荐，递归法
-def rec_opt(arr, i):
-    if i == 0:
-        return arr[0]
-    elif i == 1:
-        return max(arr[0], arr[1])
-    else:
-        A = rec_opt(arr, i-2) + arr[i]
-        B = rec_opt(arr, i)
-        return max(A, B)
-
-arr = [1, 2, 4, 1, 7, 8, 3]
-print rec_opt(arr, len(arr))
-
-#思路二：推荐，动态规划，保存前i次的最优结果
-
-def dp_opt(arr):
-    if len(arr) == 1:
-        return arr[0]
-    if len(arr) == 2:
-        return max(arr[0], arr[1])
-    
-    opt = [0] * (len(arr))
-    opt[0] = arr[0]
-    opt[1] = max(arr[0], arr[1])
-    for i in range(2, len(arr)):
-        A = opt[i-2] + arr[i]
-        B = opt[i-1]
-        opt[i] = max(A, B)
-    return opt[-1]
-
-arr = [1, 2, 4, 1, 7, 8, 3]
-print dp_opt(arr)
