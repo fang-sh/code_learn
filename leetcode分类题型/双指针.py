@@ -12,6 +12,7 @@
     题目2：83.删除排序链表中的重复元素
     题目3：27.移除元素
     题目4：283.移动零
+    题目5：203. 移除链表元素
     
     
 (n) 只有题目
@@ -284,6 +285,23 @@ def moveZeroes(nums):
     #     nums.append(0)
     nums[:] = nums + [0]*n # 注意：leetcode中是原数组修改，直接nums = nums + [0]*n会报错
     return nums # leetcode不需要return
+
+"""
+题目5：203. 移除链表元素
+"""
+def removeElements(head, val):
+    pre_head = ListNode(None, head)
+    p = pre_head
+    while head:
+        if head.val == val:
+            pre_head.next = head.next
+            head = head.next
+        else:
+            head = head.next
+            pre_head = pre_head.next
+    return p.next
+
+
 
 ------------------------（n）-------------------------------
 """

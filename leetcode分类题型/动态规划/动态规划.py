@@ -75,7 +75,7 @@ def coinChange(coins, amount):
 def coinChange(coins, amount):
     dp = [float('inf')] * (amount + 1) # 下标从0 ~ amount
     dp[0] = 0
-    for amt in range(1, len(dp)): # 从amount=1开始
+    for amt in range(1, amount+1): # 从amount=1开始
         for c in coins:
             if amt >= c: # 金额amt >= 硬币面值c，才能计算
                 dp[amt] = min(dp[amt], dp[amt-c] + 1)
@@ -85,7 +85,7 @@ def coinChange(coins, amount):
         return -1
                 
 ------------------------（2）-------------------------------          
- """
+"""
  题目1：72. 编辑距离
 
 参考链接： 
@@ -93,7 +93,10 @@ def coinChange(coins, amount):
     链接：https://leetcode-cn.com/problems/edit-distance/solution/zi-di-xiang-shang-he-zi-ding-xiang-xia-by-powcai-3/
     来源：力扣（LeetCode）
     著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
- """
+
+    B站 熊猫刷题：https://www.bilibili.com/video/BV12k4y197mR
+
+"""
  # 法一：暴力递归，自顶向下,超时        
 def minDistance(word1, word2):
     def dp(i, j):
@@ -147,8 +150,8 @@ def minDistance(word1, word2):
     for j in range(m+1):
         dp[j][0] = j
     # 自底向上求解
-    for i in range(1, m+1):
-        for j in range(1, n+1):
+    for i in range(1, m+1): # m 行
+        for j in range(1, n+1): # n 列
             if word1[i-1] == word2[j-1]:
                 dp[i][j] = dp[i-1][j-1]
             else:
@@ -166,7 +169,7 @@ def minDistance(word1, word2):
 # (推荐)法一：动态规划，时间复杂度O(n)，空间复杂度O(n)
 def maxSubArray(nums):
     if not nums:
-            return 0
+        return 0
     dp = [float('inf')] * len(nums)
     dp[0] = nums[0]
     for i in range(1, len(nums)):
@@ -179,7 +182,7 @@ def maxSubArray(nums):
 # 法二：状态压缩
 def maxSubArray(nums):
     if not nums:
-            return 0
+        return 0
     dp_0 = nums[0]
     dp_1 = 0
     res = dp_0
