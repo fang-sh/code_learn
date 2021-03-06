@@ -6,6 +6,9 @@
 (2) 经典贪心算法：跳跃游戏: https://mp.weixin.qq.com/s/hMrwcLn01BpFzBlsvGE2oQ
         题目1：55. 跳跃游戏
         题目2：45. 跳跃游戏 II
+        
+(n)
+        题目1：455. 分发饼干
 """
 ------------------------（1）-------------------------------
 
@@ -33,3 +36,22 @@ def canJump(nums):
         if max_jump >= i:
            max_jump = max(max_jump, i + jump)
     return max_jump >= i
+
+------------------------（n）-------------------------------
+
+"""
+题目1：455. 分发饼干
+"""
+class Solution:
+    def findContentChildren(self, g: List[int], s: List[int]) -> int:
+        s = sorted(s)
+        g = sorted(g)
+        length = len(g)
+        child = 0
+        for i in s:
+            if child < length and i >= g[child]:
+                child += 1
+            if child >= length:
+                break
+        return child
+

@@ -201,17 +201,17 @@ def maxSubArray(nums):
 # 法一：动态规划，时间复杂度O(n^2),4000ms
 def lengthOfLIS(nums):
     if not nums:
-            return 0
-        dp = [1] * len(nums) # 至少为1
-        # dp[0] = 1
-        for i in range(len(nums)):
-            for j in range(i):
-                if nums[j] < nums[i]: # 如果要求非严格递增，将此行 '<' 改为 '<=' 即可。
-                    A = dp[j] + 1 # 选择nums[i]
-                    B = dp[i] # 不选nums[i]
-                    dp[i] = max(A, B)
+        return 0
+    dp = [1] * len(nums) # 至少为1
+    # dp[0] = 1
+    for i in range(len(nums)):
+        for j in range(i):
+            if nums[j] < nums[i]: # 如果要求非严格递增，将此行 '<' 改为 '<=' 即可。
+                A = dp[j] + 1 # 选择nums[i]
+                B = dp[i] # 不选nums[i]
+                dp[i] = max(A, B)
         # print(dp)
-        return max(dp) # 选择dp中最大的值
+    return max(dp) # 选择dp中最大的值
 # (面试应该会问该法)法二：动态规划 + 二分查找，时间大幅加快，O(NlogN), 60ms
 def lengthOfLIS(nums):
     top = [0] * len(nums) #要处理的扑克牌

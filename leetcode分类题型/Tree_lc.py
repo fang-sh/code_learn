@@ -227,8 +227,6 @@ class Solution:
         right = self.hasPathSum(root.right, targetSum - root.val)
         return left or right
 
-
-
 """
 题目1：113. 路径总和 II
 """
