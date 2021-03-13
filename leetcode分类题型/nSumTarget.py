@@ -195,8 +195,9 @@ def nSumTarget(nums, n, start, target):
     if n == 2:
         sub = twoSumTarget(nums, start, target) # &&&&&注意&&&&&:此处为start， 不是i+1
         # sub = twoSumTarget(nums, i, target) # 也可以用i，因为上面定义了i=start
-        for v in sub:
-            res.append(v)
+        # for v in sub:
+        #     res.append(v)
+        res = sub # 此时res = sub
     else:
         while i < length:
             sub = nSumTarget(nums, n-1, i+1, target-nums[i]) #递归调用自身

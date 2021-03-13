@@ -7,6 +7,7 @@
         题目1：53. 最大子序和
 (4) 从最长递增子序列学会如何推状态转移方程: https://mp.weixin.qq.com/s/7QFapCuvi-2nkh6gREcR9g
         题目1：300. 最长递增子序列
+        题目2：674. 最长连续递增序列
 (5) 最长递增子序列之信封嵌套问题: https://mp.weixin.qq.com/s/PSDCjKlTh8MtANdgi-QIug
 
 (6) 详解最长公共子序列问题，秒杀三道动态规划题目: https://mp.weixin.qq.com/s/ZhPEchewfc03xWv9VP3msg
@@ -17,6 +18,7 @@
         （比较难理解，以后有时间做）
 (7) 子序列解题模板：最长回文子序列：https://mp.weixin.qq.com/s/zNai1pzXHeB2tQE6AdOXTA
         题目1：5. 最长回文子串(动态规划法不会)
+        题目2：647. 回文子串(结合5理解，中心扩展法和动态规划法都要理解)
 
 (8) 经典动态规划：0-1背包问题的变体: https://mp.weixin.qq.com/s/OzdkF30p5BHelCi6inAnNg
         题目1：416. 分割等和子集
@@ -170,7 +172,7 @@ def minDistance(word1, word2):
 def maxSubArray(nums):
     if not nums:
         return 0
-    dp = [float('inf')] * len(nums)
+    dp = [float('-inf')] * len(nums)
     dp[0] = nums[0]
     for i in range(1, len(nums)):
         A = nums[i] # 连续子数组，要么从i开始，重新计算
@@ -234,7 +236,39 @@ def lengthOfLIS(nums):
 
         top[left] = i # 把这张牌放到牌堆顶
     return res # 牌堆数就是 LIS 长度
-    
+
+
+"""
+674. 最长连续递增序列
+"""
+# （推荐）法一：
+class Solution:
+    def findLengthOfLCIS(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        length = len(nums)
+        dp = [1] * length
+        for i in range(1,length):
+            if nums[i]>nums[i-1]: # 连续递增
+                dp[i] = dp[i-1] + 1
+            else: # 从当前位置重新开始计算
+                dp[i] = 1
+        return max(dp)
+# （推荐）法二：   
+class Solution:
+    def findLengthOfLCIS(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        length = len(nums)
+        dp = [0] * length
+        dp[0] = 1
+        for i in range(1,length):
+            if nums[i]>nums[i-1]: # 连续递增
+                dp[i] = dp[i-1] + 1
+            else: # 从当前位置开始计算
+                dp[i] = 1
+        return max(dp)
+
 ------------------------（5）-------------------------------         
 
 
@@ -273,7 +307,65 @@ class Solution:
 # (必须掌握)法二：动态规划
 def longestPalindrome(s):
     目前还不会
-    
+
+"""   
+题目2：647. 回文子串(结合5理解，中心扩展法和动态规划法都要理解)
+"""
+# (掌握)法一：中心扩展法
+class Solution:
+    def countSubstrings(self, s: str) -> int:
+        c1 = 0
+        c2 = 0
+        for i in range(len(s)):
+            c1 += self.find(s, i, i) 
+            c2 += self.find(s, i, i+1)
+        return c1+c2
+ 
+    def find(self, s, left, right):
+        count = 0
+        while left>=0 and right<len(s) and s[left]==s[right]:
+            left -= 1
+            right += 1
+            count += 1
+        return count
+
+# (掌握)法二：动态规划法
+class Solution:
+    def countSubstrings(self, s: str) -> int:
+        res = 0
+        n = len(s)
+        dp = [[0]*n for _ in range(n)]
+        for i in range(n): # i 列
+            for j in range(i+1): # j 行
+                if s[i]==s[j] and (i-j<2 or dp[j+1][i-1]):
+                    dp[j][i] = 1
+                    res += 1
+        return res
+
+class Solution:
+    def countSubstrings(self, s: str) -> int:
+        n = len(s)
+        dp = [[False] * n for _ in range(n)]
+        count = 0
+        # 枚举所有可能 因为代表子串 所以 i <= j
+        for j in range(n):
+            for i in range(j+1):
+                # 子串长度
+                length = j - i + 1
+                # 只有一个字符，直接就是一个回文串
+                if length == 1:
+                    dp[i][j] = True
+                    count += 1
+                # 两个字符，只有相等才是回文串
+                if length == 2 and s[i] == s[j]:
+                    dp[i][j] = True
+                    count += 1
+                # 超过两个字符 首位相同 且除去首尾的子串是回文串 才是回文串
+                if length > 2 and s[i]==s[j] and dp[i+1][j-1] is True:
+                    dp[i][j] = True
+                    count += 1
+        return count
+
 
 ------------------------（8）-------------------------------
 """
@@ -323,7 +415,7 @@ def change(amount, coins):
 
 
 
-------------------------（2）-------------------------------
+------------------------（n）-------------------------------
 """
 题目n：5. 最长回文子串 leetcode
 """

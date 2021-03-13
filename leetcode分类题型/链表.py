@@ -2,6 +2,7 @@
 题目1：21. 合并两个有序链表
 题目2：23. 合并K个升序链表
 题目3：148. 排序链表
+题目4：24. 两两交换链表中的节点
 
 """
 
@@ -80,3 +81,33 @@ class Solution:
             res = res.next
         res.next = left if not right else right
         return p.next
+
+
+"""
+题目4：24. 两两交换链表中的节点
+"""
+# (推荐)法一：递归
+class Solution:
+    def swapPairs(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
+            return head
+        newHead = head.next
+        head.next = self.swapPairs(newHead.next)
+        newHead.next = head
+        return newHead
+
+# 法二：    
+class Solution:
+    def swapPairs(self, head: ListNode) -> ListNode:
+        p = ListNode(0, head)
+        tmp = p 
+        while tmp.next and tmp.next.next:
+            node1 = tmp.next
+            node2 = tmp.next.next
+            tmp.next = node2
+            node1.next = node2.next
+            node2.next = node1
+            tmp = node1
+        return p.next  
+    
+    

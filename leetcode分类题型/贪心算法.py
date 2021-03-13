@@ -36,7 +36,17 @@ def canJump(nums):
         if max_jump >= i:
            max_jump = max(max_jump, i + jump)
     return max_jump >= i
-
+# 
+class Solution:
+    def canJump(self, nums: List[int]) -> bool:
+        res = 0
+        for i in range(len(nums)):
+            jump = nums[i]
+            if i <= res:
+                res = max(res, i + jump)
+            else:
+                return False
+        return True
 ------------------------（n）-------------------------------
 
 """

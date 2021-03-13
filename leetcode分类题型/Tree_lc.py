@@ -33,6 +33,9 @@
 (n)
         题目1：112. 路径总和
         题目2：113. 路径总和 II
+        题目3：543. 二叉树的直径
+        题目4：617. 合并二叉树
+        题目5：110. 平衡二叉树
 """
 
 ------------------------（1）-------------------------------
@@ -155,6 +158,56 @@ class Solution:
         return root
 
 """
+题目2：114. 将二叉树展开为链表，难度 Medium
+"""
+# 法一：后序遍历
+class Solution:
+    def flatten(self, root: TreeNode) -> None:
+        """
+        Do not return anything, modify root in-place instead.
+        """
+        if not root:
+            return
+        self.flatten(root.left) # 左
+        self.flatten(root.right) # 右
+        # 根
+        # **** 后序遍历位置 ****   
+        # 1、左右子树已经被拉平成一条链表
+        left = root.left
+        right = root.right
+        # 2、将左子树作为右子树
+        root.left = None
+        root.right = left
+        # 3、将原先的右子树接到当前右子树的末端
+        p = root
+        while p.right:
+            p = p.right
+        p.right = right
+# 法二：前序遍历
+class Solution:
+    def flatten(self, root: TreeNode) -> None:
+        """
+        Do not return anything, modify root in-place instead.
+        """
+        if not root:
+            return
+        # 根
+        # **** 后序遍历位置 ****   
+        # 1、左右子树已经被拉平成一条链表
+        left = root.left
+        right = root.right
+        
+        root.left = None # 2、将左子树作为右子树
+        root.right = left
+        
+        p = root # 3、将原先的右子树接到当前右子树的末端
+        while p.right:
+            p = p.right
+        p.right = right
+        
+        self.flatten(root.left) # 左
+        self.flatten(root.right) # 右
+"""
 题目3：116. 填充二叉树节点的右侧指针，难度 Medium
 """
 def connect(self, root: 'Node') -> 'Node':
@@ -249,18 +302,96 @@ def pathSum(root, targetSum):
         # print('---------------')
     return res
 
-# 法二：递归方法
+# (推荐)法二：递归方法
 def pathSum(root, targetSum):
     
     def helper(root, tmp, targetSum):
         if not root:
             return []
-        if not root.left and not root.right and targetSum-root.val == 0:
+        if targetSum == root.val and not root.left and not root.right:
             tmp += [root.val]
-            res.append(tmp)
+            res.append(tmp) # targetSum是节点的和，只有到最后一步才会满足，所以可以再这一步用res直接append
         helper(root.left, tmp+[root.val], targetSum-root.val)
         helper(root.right, tmp+[root.val], targetSum-root.val)
     
     res = []
     helper(root,[], targetSum)
     return res    
+
+"""
+题目3：543. 二叉树的直径
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/diameter-of-binary-tree/solution/er-cha-shu-de-zhi-jing-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+"""
+class Solution:
+    def diameterOfBinaryTree(self, root: TreeNode) -> int:
+        self.ans = 1
+        
+        def depth(node):
+            # 访问到空节点了，返回0
+            if not node:
+                return 0
+            # 左儿子为根的子树的深度
+            L = depth(node.left)
+            # 右儿子为根的子树的深度
+            R = depth(node.right)
+            # 计算d_node即L+R+1 并更新ans
+            self.ans = max(self.ans, L + R + 1)
+            # 返回该节点为根的子树的深度
+            return max(L, R) + 1
+
+        depth(root)
+        return self.ans - 1
+    
+"""
+题目4：617. 合并二叉树
+"""
+class Solution:
+    def mergeTrees(self, root1: TreeNode, root2: TreeNode) -> TreeNode:
+        if not root1:
+            return root2
+        if not root2:
+            return root1
+        
+        m = TreeNode(root1.val + root2.val)
+        m.left = self.mergeTrees(root1.left, root2.left)
+        m.right = self.mergeTrees(root1.right, root2.right)
+        return m
+    
+"""
+题目5：110. 平衡二叉树
+"""
+# 法一：从顶至底（暴力法）
+# 此方法容易想到，但会产生大量重复计算，时间复杂度较高。
+class Solution:
+    def isBalanced(self, root: TreeNode) -> bool:
+        def height(root):
+            if not root:
+                return 0
+            return max(height(root.left), height(root.right)) + 1
+            
+        if not root:
+            return True
+        return abs(height(root.left) - height(root.right)) <= 1 and self.isBalanced(root.left) and self.isBalanced(root.right)
+
+# (推荐)法二：从底至顶（提前阻断）
+# 此方法为本题的最优解法，但“从底至顶”的思路不易第一时间想到。
+# 思路是对二叉树做先序遍历，从底至顶返回子树最大高度，若判定某子树不是平衡树则 “剪枝” ，直接向上返回。
+class Solution:
+    def isBalanced(self, root: TreeNode) -> bool:
+        # 定义函数
+        def height(root):
+            if not root:
+                return 0
+            left = height(root.left)
+            right = height(root.right)
+            if left == -1 or right == -1 or abs(left - right)>1:
+                return -1
+            else:
+                return max(left, right) + 1
+        # 执行
+        return height(root) >= 0
+
