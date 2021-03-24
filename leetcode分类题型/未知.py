@@ -1,6 +1,9 @@
 """
 题目1：287. 寻找重复数
 题目2：3. 无重复字符的最长子串
+题目3：56. 合并区间
+题目4：50. Pow(x, n)
+题目5：402. 移掉K位数字
 """
 ##########################################################################
 """
@@ -24,18 +27,18 @@ def findDuplicate(self, nums: List[int]) -> int:
 # (面试考察)法二：二分查找
 class Solution:
     def findDuplicate(self, nums: List[int]) -> int:
-        left = 1
+        left = 0
         right = len(nums) - 1
         while left < right:
-            mid = left + (right - left) // 2
+            mid = left + (right-left)//2
             cnt = 0
             for n in nums:
                 if n <= mid:
                     cnt += 1
-            if cnt > mid:
-                right = mid
-            else:
+            if cnt <= mid:
                 left = mid + 1
+            else:
+                right = mid
         return left
 # 法三：快慢指针
 class Solution:
@@ -90,5 +93,63 @@ class Solution:
             max_len = max(max_len, right - left)
         return max_len
 
+"""
+题目3：56. 合并区间
+思路：先对输入排序，排序方法需要记住，再合并（分析）
+"""
+class Solution:
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        if not intervals:
+            return []
+        
+        intervals.sort(key=lambda x: x[0]) # 记住写法
+        print(intervals)
+        
+        res = []
+        for item in intervals:
+            if not res or res[-1][1] < item[0]:
+                res.append(item)
+            else:
+                # 这种写法能通过，但是排序的intervals，下面的写法更好
+                # a = res.pop()
+                # res.append([a[0], max(a[1], item[1])])
+                res[-1][1] = max(res[-1][1], item[1])
+        return res
 
-
+"""
+题目4：50. Pow(x, n)
+思路：需要优化，不然超时，n为奇数，n为偶数时分别判断
+"""
+class Solution:
+    def myPow(self, x: float, n: int) -> float:
+        if n < 0:
+            x = 1/x
+            n = -n
+            
+        res = 1
+        
+        while n > 0:
+            if n % 2 == 0: # 当n为偶数时
+                x *= x
+                n /= 2
+            else:
+                res = res * x # 当n为奇数时
+                n -= 1
+        return res
+    
+"""
+题目5：402. 移掉K位数字
+思路：栈 stack
+"""
+class Solution:
+    def removeKdigits(self, num: str, k: int) -> str:
+        if len(num) == k:
+            return '0'
+        stack = []
+        remain = len(num) - k
+        for i in num:
+            while stack and k>0 and i<stack[-1]:
+                stack.pop()
+                k -= 1
+            stack.append(i)
+        return str(int(''.join(stack)[:remain]))

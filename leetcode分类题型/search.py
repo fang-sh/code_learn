@@ -6,6 +6,7 @@
 题目1：二分查找基本框架
 题目2：二分查找难点题：剑指 Offer 11. 旋转数组的最小数字
 题目3：50. Pow(x, n)（注意：面试考察 快速幂法）
+题目4：287. 寻找重复数(面试)
 
 （重点补充，（1）中有答案）
 寻找左侧边界的二分搜索，左开右闭
@@ -99,3 +100,37 @@ def myPow(self, x: float, n: int) -> float:
         n >>= 1
     return res
 
+"""
+题目4：287. 寻找重复数
+面试过，考察二分查找
+
+作者：Nicosauto
+链接：https://leetcode-cn.com/problems/find-the-duplicate-number/solution/python-xun-zhao-zhong-fu-shu-by-nicosaut-o8zu/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+"""
+# 法一：普通方法
+def findDuplicate(self, nums: List[int]) -> int:
+    d = {}
+    for i in nums:
+        if i not in d:
+            d[i] = 1
+        else:
+            return i
+
+# (面试考察)法二：二分查找
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        left = 0
+        right = len(nums) - 1
+        while left < right:
+            mid = left + (right-left)//2
+            cnt = 0
+            for n in nums:
+                if n <= mid:
+                    cnt += 1
+            if cnt <= mid:
+                left = mid + 1
+            else:
+                right = mid
+        return left

@@ -36,6 +36,23 @@
         题目3：543. 二叉树的直径
         题目4：617. 合并二叉树
         题目5：110. 平衡二叉树
+        
+        ### 二叉树的层序遍历
+        题目6：102.二叉树的层序遍历（面试）
+        # 题目7：107.二叉树的层序遍历II （思路同102）
+        题目8：199.二叉树的右视图
+        # 题目9：637.二叉树的层平均值 （思路同102）
+        题目10：429.N叉树的层序遍历
+        题目11：515.在每个树行中找最大值
+        题目12：116
+        题目13：117
+        ### 二叉树的层序遍历
+        
+        题目14：589. N 叉树的前序遍历
+        题目15：590. N 叉树的后序遍历
+        
+
+        
 """
 
 ------------------------（1）-------------------------------
@@ -395,3 +412,186 @@ class Solution:
         # 执行
         return height(root) >= 0
 
+"""
+题目6：102.二叉树的层序遍历（面试）
+思路：队列queue，BFS
+"""
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+# （推荐）法一：面试考过
+class Solution:
+    def levelOrder(self, root: TreeNode) -> List[List[int]]:
+        if not root:
+            return []
+        # 定义队列queue
+        queue = [root]
+        res = [] 
+
+        while queue:
+            size = len(queue) # 一层一层的遍历
+            tmp = []
+            for i in range(size): # 一层一层的遍历
+                node = queue.pop(0)
+                tmp.append(node.val)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            res.append(tmp)
+        
+        return res
+# （推荐）法二：类似于N叉树层序遍历
+class Solution:
+    def levelOrder(self, root: TreeNode) -> List[List[int]]:
+        
+        if not root:
+            return []
+        queue = [root]
+        res = []
+        while queue:
+            tmp = []
+            res.append([node.val for node in queue])
+            for node in queue:
+                if node.left:
+                    tmp.append(node.left)
+                if node.right:
+                    tmp.append(node.right)
+            queue = tmp
+        return res
+""" 
+题目8：199.二叉树的右视图
+思路：同102题，获取每一层的val，放在tmp中，每次把tmp[-1]最后一个值，append到res中
+BFS
+"""
+# 法一：BFS, 同102题，获取每一层的val，放在tmp中，每次把tmp[-1]最后一个值，append到res中
+class Solution:
+    def rightSideView(self, root: TreeNode) -> List[int]:
+        if not root:
+            return []
+        queue = [root]
+        res = []
+        while queue: # 一层一层的遍历
+            size = len(queue) # 一层一层的遍历
+            tmp = [] # 存放这一层的值
+            for i in range(size): # 一层一层的遍历
+                node = queue.pop(0) # 先把左边的值pop出
+                tmp.append(node.val)
+                if node.left: # 先把左子树放进去
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            res.append(tmp[-1])
+        return res
+
+# (推荐)法二：bfs，思路：存放每一层所有的节点
+class Solution:
+    def rightSideView(self, root: TreeNode) -> List[int]:
+        if not root:
+            return []
+        res = []
+
+        def bfs(root):
+            queue = [root]
+            while queue:
+                tmp = [] # 存放每一层所有的节点
+                res.append(queue[-1].val)
+                for node in queue:
+                    if node.left:
+                        tmp.append(node.left)
+                    if node.right:
+                        tmp.append(node.right)
+                queue = tmp # 更新queue，每次表示其中一层
+        bfs(root)
+        return res
+# 法三：DFS 
+class Solution:
+    def rightSideView(self, root: TreeNode) -> List[int]:
+        res = []
+        
+        def dfs(root, depth):
+            if not root:
+                return
+            if len(res) <= depth:
+                res.append(0)
+            res[depth] = root.val
+            dfs(root.left, depth+1)
+            dfs(root.right, depth+1)
+            
+        dfs(root, 0)
+        return res
+"""
+题目10：429.N叉树的层序遍历
+"""
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val=None, children=None):
+        self.val = val
+        self.children = children
+"""
+
+class Solution:
+    def levelOrder(self, root: 'Node') -> List[List[int]]:
+        if not root:
+            return []
+        queue = [root]
+        res = []
+        while queue:
+            tmp = [] # 存放一层的所有节点
+            res.append([node.val for node in queue])
+            for node in queue:
+                for child in node.children:
+                    tmp.append(child)
+            queue = tmp # 更新queue，每次表示其中一层
+        return res
+
+"""
+题目14：589. N 叉树的前序遍历
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val=None, children=None):
+        self.val = val
+        self.children = children
+"""
+class Solution:
+    def preorder(self, root: 'Node') -> List[int]:
+        res = []
+        def helper(root):
+            if not root:
+                return []
+
+            res.append(root.val) # 前序
+            for child in root.children:
+                helper(child)
+        helper(root)
+        return res
+
+"""
+题目15：590. N 叉树的后序遍历
+"""
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val=None, children=None):
+        self.val = val
+        self.children = children
+"""
+
+class Solution:
+    def postorder(self, root: 'Node') -> List[int]:
+        res = []
+
+        def helper(root):
+            if not root:
+                return []
+            for child in root.children:
+                helper(child)
+            res.append(root.val)
+        
+        helper(root)
+        return res

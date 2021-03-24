@@ -96,7 +96,7 @@ class Solution:
         newHead.next = head
         return newHead
 
-# 法二：    
+# （推荐）法二：理解原理   
 class Solution:
     def swapPairs(self, head: ListNode) -> ListNode:
         p = ListNode(0, head)
