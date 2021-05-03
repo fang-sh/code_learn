@@ -2,6 +2,10 @@
 题目1：矩阵（面试）
 题目2：200. 岛屿数量
 题目3：695. 岛屿的最大面积
+题目4：62. 不同路径
+题目5：48. 旋转图像
+题目6：153. 寻找旋转排序数组中的最小值
+题目7：287. 寻找重复数
 """
 
 
@@ -209,11 +213,135 @@ class Solution:
                     count = dfs(grid, i, j)
                     max_count = max(max_count, count)
         return max_count
-                
 
-            
-                    
+"""
+题目4：62. 不同路径
+思路：dp[i][j] = dp[i-1][j] + dp[i][j-1]
+    定义m行n列的二维矩阵，第1行和第1列全置1，其余置0
+    
+    作者：powcai
+    链接：https://leetcode-cn.com/problems/unique-paths/solution/dong-tai-gui-hua-by-powcai-2/
+    来源：力扣（LeetCode）
+    著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+"""   
+# 法一：动态规划  
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        # dp的定义方法
+        # dp = [[0] * (n) for _ in range(m)]
+        # dp[0] = [1] * n # 第1行置1
+        # for i in range(m): # 第1列置1
+        #     dp[i][0] = 1
+        dp = [[1] * n] + [[1] + [0] * (n - 1) for _ in range(m - 1)]
+        print(dp)
+        for i in range(1, m): # 注意从1开始
+            for j in range(1, n): # 注意从1开始
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+        return dp[m - 1][n - 1] # dp[-1][-1]
+    
+# 法二：优化1：空间复杂度 O(2n)O(2n)
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        pre = [1] * n
+        cur = [1] * n
+        for i in range(1, m):
+            for j in range(1, n):
+                cur[j] = pre[j] + cur[j-1]
+            pre = cur[:]
+        return pre[-1]
+# 法三：优化2：空间复杂度 O(n)O(n)
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        cur = [1] * n
+        for i in range(1, m):
+            for j in range(1, n):
+                cur[j] += cur[j-1]
+        return cur[-1]
 
+"""
+题目5：48. 旋转图像
+"""
+class Solution:
+    def rotate(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        n = len(matrix)
+        for i in range(n):
+            for j in range(i+1, n):
+                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+        for i in range(n):
+            for j in range(n//2):
+                matrix[i][j], matrix[i][n-j-1] = matrix[i][n-j-1], matrix[i][j]
+
+"""
+题目6：153. 寻找旋转排序数组中的最小值
+"""
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        left = 0
+        right = len(nums) - 1
+        while left < right:
+            mid = left + (right - left)//2
+            if nums[mid] > nums[right]:
+                left = mid + 1
+            elif nums[mid] < nums[right]:
+                right = mid
+            else:
+                right -= 1
+        return nums[left] # 注意不是return left 犯了好多次错误了
+"""
+题目7：287. 寻找重复数
+
+面试过，考察二分查找
+
+作者：Nicosauto
+链接：https://leetcode-cn.com/problems/find-the-duplicate-number/solution/python-xun-zhao-zhong-fu-shu-by-nicosaut-o8zu/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+"""
+# 法一：普通方法
+def findDuplicate(self, nums: List[int]) -> int:
+    d = {}
+    for i in nums:
+        if i not in d:
+            d[i] = 1
+        else:
+            return i
+
+# (面试考察)法二：二分查找
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        left = 0
+        right = len(nums) - 1
+        while left < right:
+            mid = left + (right-left)//2
+            cnt = 0
+            for n in nums:
+                if n <= mid:
+                    cnt += 1
+            if cnt <= mid:
+                left = mid + 1
+            else:
+                right = mid
+        return left # 注意此处返回left不是nums[left]
+# 法三：快慢指针
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        slow = fast = cir_start = 0
+        while True:
+            fast = nums[nums[fast]]
+            slow = nums[slow]
+            if fast == slow:
+                break
+
+        while True:
+            slow = nums[slow]
+            cir_start = nums[cir_start]
+            if cir_start == slow:
+                return slow
             
         
 

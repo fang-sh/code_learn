@@ -154,6 +154,48 @@ def fourSumTarget(nums, start, target):
         i += 1 # 进行下一步迭代
     return res
 
+# 四数之和
+class Solution:
+    def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
+        def NSum(nums, k, start, target):
+            nums.sort()
+            i = start
+            j = len(nums)
+            res = []
+            if len(nums)<k or k < 2:
+                return res
+            elif k == 2:
+                res = self.twoSum(nums, i, target)
+            else:
+                while i < len(nums):
+                    sub = NSum(nums, k-1, i+1, target-nums[i])
+                    for v in sub:
+                        v.append(nums[i])
+                        res.append(v)
+                    while i+1<len(nums) and nums[i] == nums[i+1]:
+                        i += 1
+                    i += 1
+            return res
+        
+        return NSum(nums, 4, 0, target)
+            
+    def twoSum(self, nums, start, target):
+        i = start
+        j = len(nums) - 1
+        r = []
+        while i < j:
+            left = nums[i]
+            right = nums[j]
+            if left + right < target:
+                i += 1
+            elif left + right > target:
+                j -= 1
+            else:
+                r.append([nums[i], nums[j]])
+                while i < j and nums[i] == left: i += 1
+                while i < j and nums[j] == right: j -= 1
+        return r
+
 #########################################################################
 
 """

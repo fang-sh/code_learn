@@ -7,6 +7,8 @@
 题目2：二分查找难点题：剑指 Offer 11. 旋转数组的最小数字
 题目3：50. Pow(x, n)（注意：面试考察 快速幂法）
 题目4：287. 寻找重复数(面试)
+题目5：33. 搜索旋转排序数组
+题目6：34. 在排序数组中查找元素的第一个和最后一个位置
 
 （重点补充，（1）中有答案）
 寻找左侧边界的二分搜索，左开右闭
@@ -134,3 +136,79 @@ class Solution:
             else:
                 right = mid
         return left
+
+"""
+题目5：33. 搜索旋转排序数组
+"""
+# 法一
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        '''
+        
+        if target in nums:
+            return nums.index(target)
+        return -1
+        '''
+# 法二：二分查找
+
+
+"""
+题目6：34. 在排序数组中查找元素的第一个和最后一个位置
+面试遇到，考察二分
+思路：考察二分查找
+"""
+# 法一：非二分查找，O(N)
+class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        if not nums:
+            return [-1, -1]
+        idx_L = -1
+        idx_R = -1
+        for i in range(len(nums)):
+            if nums[i] == target:
+                if idx_L == -1:
+                    idx_L = i
+                    idx_R = i
+                else:
+                    idx_R = i
+            
+        return [idx_L, idx_R]
+class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        for i in range(len(nums)):
+            if nums[i] == target:
+                j = i + 1
+                while j < len(nums) and nums[j] == target:
+                    j += 1
+                return [i, j-1]
+        return [-1, -1]
+
+# 法二：二分查找
+# https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/solution/duo-tu-yan-shi-34-zai-pai-xu-shu-zu-zhong-cha-zhao/
+class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        if not nums:
+            return [-1, -1]
+        
+        def find(is_find_first):
+            left = 0
+            right = len(nums) - 1
+            while left <= right:
+                mid = left + (right - left) // 2
+                if nums[mid] < target:
+                    left = mid + 1
+                elif nums[mid] > target:
+                    right = mid - 1
+                else:
+                    if is_find_first:
+                        if mid>0 and nums[mid] == nums[mid-1]:
+                            right = mid - 1
+                        else:
+                            return mid
+                    else:
+                        if mid < len(nums) - 1 and nums[mid] == nums[mid+1]:
+                            left = mid + 1
+                        else:
+                            return mid
+            return -1
+        return [find(True), find(False)]
