@@ -1,10 +1,37 @@
 """
+题目0：面试时，当要求你自定义ListNode，并实现后续算法时，可以将list转为ListNode进行后续的工作
 题目1：21. 合并两个有序链表
 题目2：23. 合并K个升序链表
 题目3：148. 排序链表
 题目4：24. 两两交换链表中的节点
 
 """
+
+
+"""
+题目0：
+"""
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+# 将列表转换为ListNode
+def trans_listnode(i_list):
+    r = r1 = ListNode(None)
+    for v in i_list:
+        r1.next = ListNode(v)
+        r1 = r1.next
+    return r.next
+
+# 例子
+[2, 3, 5]
+l1 = trans_listnode([2, 3, 5]) # 2 -> 3 -> 5
+r = []
+while l1:
+    r.append(l1.val)
+    l1 = l1.next
+# 结果：r = [2, 3, 5]
 
 
 """
