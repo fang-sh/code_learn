@@ -1,0 +1,13 @@
+{"grid_size": 100, 
+"generator_lr": 0.001,
+"discriminator_lr": 0.001, 
+"pre_train_epoch": 1, 
+"train_epoch": 1, 
+"batch_size": 20, 
+"mean_shift_radius": 25, 
+"mean_shift_bandwith": 20, 
+"strange_num": 0, 
+"low_data_path": "Temp/low_data.npy", 
+"high_data_path": "Temp/high_data.npy", 
+"model_out_path": "Temp/SI-AGAN.pth", 
+"log_path": "Temp/SI-AGAN-log.txt"}
